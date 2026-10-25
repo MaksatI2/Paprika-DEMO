@@ -1,0 +1,14 @@
+# Public routes of the Acme Shop API gateway and their per-route limits.
+routes:
+  - path: /api/checkout
+    upstream: checkout
+    rate_limit_rps: 150
+  - path: /api/orders/{id}
+    upstream: orders
+    rate_limit_rps: 200
+  - path: /api/search
+    upstream: search
+    rate_limit_rps: 200
+  - path: /api/login
+    upstream: authentication
+    rate_limit_rps: 50
