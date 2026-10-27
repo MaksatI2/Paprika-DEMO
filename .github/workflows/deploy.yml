@@ -1,0 +1,48 @@
+name: Deploy to production
+
+# Every push to main that touches a service records a GitHub Deployment to "production".
+# Paprika's GitHub MCP reads these with list_deployments; agents use them to explain incidents.
+on:
+  push:
+    branches: [main]
+    paths: ["services/**", "deploy/**"]
+  workflow_dispatch:
+    inputs:
+      service:
+        description: Service to redeploy
+        type: choice
+        options: [checkout, payments, gateway, inventory]
+        default: checkout
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://shop.acme.example
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Work out what changed
+        id: changed
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_SERVICE: ${{ inputs.service }}
+        run: |
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            echo "services=$INPUT_SERVICE" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only HEAD~1 HEAD -- services deploy \
+            | awk -F/ '$1=="services"{print $2} $1=="deploy"{sub(/\.yaml$/,"",$3); print $3}' \
+            | sort -u | paste -sd, -)
+          echo "services=${changed:-none}" >> "$GITHUB_OUTPUT"
+      - name: Roll out (simulated)
+        env:
+          SERVICES: ${{ steps.changed.outputs.services }}
+        run: |
+          for s in ${SERVICES//,/ }; do
+            [ "$s" = none ] && continue
+            echo "Deploying $s $(cat "services/$s/VERSION" 2>/dev/null || echo unknown) to production"
+          done
