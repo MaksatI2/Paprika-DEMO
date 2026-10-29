@@ -18,5 +18,5 @@ def charge(amount_cents: int, token: str, call: Callable[[int, str], str], attem
         except ProviderTimeout:
             if attempt == attempts:
                 raise
-            time.sleep(0.2)
+            time.sleep(0.2 * attempt)
     raise RuntimeError("unreachable")
