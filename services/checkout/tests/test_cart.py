@@ -21,6 +21,8 @@ class CartTests(unittest.TestCase):
     def test_total_with_discount(self):
         self.assertEqual(total(LINES, Decimal("4.98")), Decimal("43.50"))
 
+    def test_discount_never_goes_negative(self):
+        self.assertEqual(total(LINES, Decimal("100")), Decimal("0.00"))
 
 
 class ReservationTests(unittest.TestCase):

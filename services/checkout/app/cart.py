@@ -1,7 +1,7 @@
 """Cart totals for checkout: subtotal, discount and sales tax."""
 
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 
 TAX_RATE = Decimal("0.0875")
 CENT = Decimal("0.01")
@@ -19,9 +19,9 @@ def subtotal(lines: list[Line]) -> Decimal:
 
 
 def tax(amount: Decimal) -> Decimal:
-    return (amount * TAX_RATE).quantize(CENT)
+    return (amount * TAX_RATE).quantize(CENT, ROUND_HALF_UP)
 
 
 def total(lines: list[Line], discount: Decimal = Decimal("0")) -> Decimal:
-    base = subtotal(lines) - discount
+    base = max(subtotal(lines) - discount, Decimal("0"))
     return base + tax(base)
