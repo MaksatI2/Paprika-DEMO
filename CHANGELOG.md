@@ -2,6 +2,9 @@
 
 Releases of Acme Shop services, newest first.
 
+## Unreleased
+- checkout 12.6.1: reserve the whole cart in one inventory call.
+
 ## 2026-11-03
 - checkout 12.6.0: cart totals per line with half-up tax rounding.
 - payments 5.4.2: retry provider timeouts with a growing back-off.

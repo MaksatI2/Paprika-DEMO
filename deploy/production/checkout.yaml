@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: checkout
-          image: ghcr.io/acme/checkout:12.6.0
+          image: ghcr.io/acme/checkout:12.6.1
           ports:
             - containerPort: 8080
           readinessProbe:
