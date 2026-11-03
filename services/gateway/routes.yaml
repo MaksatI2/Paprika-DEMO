@@ -11,7 +11,7 @@ routes:
   - path: /api/search
     upstream: search
     timeout_ms: 1500
-    rate_limit_rps: 200
+    rate_limit_rps: 300
   - path: /api/login
     upstream: authentication
     timeout_ms: 2000
