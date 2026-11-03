@@ -2,6 +2,9 @@
 
 Releases of Acme Shop services, newest first.
 
+## Unreleased
+- payments 5.4.3: jitter between timeout retries.
+
 ## 2026-11-03
 - checkout 12.6.0: cart totals per line with half-up tax rounding.
 - payments 5.4.2: retry provider timeouts with a growing back-off.
