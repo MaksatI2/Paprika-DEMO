@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: payments
-          image: ghcr.io/acme/payments:5.4.2
+          image: ghcr.io/acme/payments:5.4.3
           ports:
             - containerPort: 8080
           readinessProbe:

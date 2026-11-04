@@ -1,5 +1,6 @@
 """Charge a card through the payment provider, retrying transient failures."""
 
+import random
 import time
 from collections.abc import Callable
 
@@ -18,5 +19,5 @@ def charge(amount_cents: int, token: str, call: Callable[[int, str], str], attem
         except ProviderTimeout:
             if attempt == attempts:
                 raise
-            time.sleep(0.2 * attempt)
+            time.sleep(0.2 * attempt + random.uniform(0, 0.1))
     raise RuntimeError("unreachable")
