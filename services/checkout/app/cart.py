@@ -23,5 +23,6 @@ def tax(amount: Decimal) -> Decimal:
 
 
 def total(lines: list[Line], discount: Decimal = Decimal("0")) -> Decimal:
-    base = max(subtotal(lines) - discount, Decimal("0"))
-    return base + tax(base)
+    """Tax each line on its own (needed for per-item tax rules), then take the discount and its tax off."""
+    taxed = sum((amount + tax(amount) for amount in (line.unit_price * line.quantity for line in lines)), Decimal("0"))
+    return max(taxed - discount - tax(discount), Decimal("0"))
